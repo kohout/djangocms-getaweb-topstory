@@ -1,14 +1,9 @@
 # -*- coding: utf-8 -*-
 from cms.models.pluginmodel import CMSPlugin
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext as _
-from django.utils.timezone import utc
 from easy_thumbnails.fields import ThumbnailerImageField
-from easy_thumbnails.files import get_thumbnailer
-from easy_thumbnails.signal_handlers import generate_aliases_global
-from easy_thumbnails.signals import saved_file
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -31,6 +26,12 @@ class TopStoryItem(models.Model):
     TEASER_POSITION_CHOICES = (
         ('left', _(u'left')),
         ('right', _(u'right')),
+    )
+
+    TEASER_LAYOUT_CHOICES = (
+        ('white', _(u'Weißer Hintergrund, Schwarze Schrift')),
+        ('black', _(u'Schwarzer Hintergrund, Weiße Schrift')),
+        ('green', _(u'Grüner Hintergrund, Graue Schrift')),
     )
 
     PERCENTAGE_CHOICES = (
@@ -70,7 +71,15 @@ class TopStoryItem(models.Model):
     teaser_position = models.CharField(
         max_length=50,
         choices=TEASER_POSITION_CHOICES,
-        verbose_name=_(u'Teaer Position'))
+        default=TEASER_POSITION_CHOICES[0][0],
+        verbose_name=_(u'Teaser Position'))
+
+    teaser_layout = models.CharField(
+        max_length=100,
+        choices=TEASER_LAYOUT_CHOICES,
+        default=TEASER_LAYOUT_CHOICES[0][0],
+        verbose_name=_(u'Teaser Layout')
+    )
 
     focal_point_x = models.PositiveIntegerField(
         default=50,
@@ -98,6 +107,13 @@ class TopStoryItem(models.Model):
         default=0,
         null=True,
         verbose_name=_(u'Original Image Height'))
+
+    size = models.CharField(
+        choices=settings.THUMBNAIL_TOPSTORY_CHOICES,
+        default=settings.THUMBNAIL_TOPSTORY_CHOICES[0],
+        max_length=50,
+        verbose_name=_(u'Image size and scale')
+    )
 
     content_type = models.ForeignKey(ContentType, blank=True, null=True)
     object_id = models.PositiveIntegerField(blank=True, null=True)
