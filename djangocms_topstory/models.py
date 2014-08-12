@@ -15,6 +15,18 @@ class TopStory(CMSPlugin):
         null=True,
         verbose_name=_(u'Title'))
 
+    width = models.CharField(
+        max_length=10,
+        default='100%',
+        verbose_name=_(u'Width of plugin')
+    )
+
+    height = models.CharField(
+        max_length=10,
+        default='434px',
+        verbose_name=_(u'Height of plugin')
+    )
+
     def get_items(self):
         return TopStoryItem.objects.filter(active=True).order_by('ordering')
 
