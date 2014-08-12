@@ -110,7 +110,7 @@ class TopStoryItem(models.Model):
 
     size = models.CharField(
         choices=settings.THUMBNAIL_TOPSTORY_CHOICES,
-        default=settings.THUMBNAIL_TOPSTORY_CHOICES[0],
+        default=settings.THUMBNAIL_TOPSTORY_CHOICES[0][0],
         max_length=50,
         verbose_name=_(u'Image size and scale')
     )
