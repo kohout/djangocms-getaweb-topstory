@@ -28,7 +28,7 @@ class TopStory(CMSPlugin):
     )
 
     def get_items(self):
-        return TopStoryItem.objects.filter(active=True).order_by('ordering')
+        return TopStoryItem.objects.filter(active=True, topstory=self).order_by('ordering')
 
     def __unicode__(self):
         return self.title

@@ -2,8 +2,8 @@
 
 {% if items %}
 <div id="swiper">
-  <a class="arrow arrow-left" href="#"><div></div></a>
-  <a class="arrow arrow-right" href="#"><div></div></a>
+  <a class="arrow arrow-left" {% if items.count == 1 %}style="display:none;"{% endif %} href="#"><div></div></a>
+  <a class="arrow arrow-right" {% if items.count == 1 %}style="display:none;"{% endif %} href="#"><div></div></a>
   <div class="swiper-container" style="width: {{ instance.width }}; height: {{ instance.height }};">
     <div class="swiper-wrapper">
       {% for item in items %}
@@ -21,6 +21,7 @@
       {% endfor %}
     </div>
   </div>
-  <div class="swiper-pagination"></div>
+
+  <div class="swiper-pagination" {% if items.count == 1 %}style="display:none;"{% endif %}></div>
 </div>
 {% endif %}
