@@ -30,6 +30,12 @@ class TopStory(CMSPlugin):
     def get_items(self):
         return TopStoryItem.objects.filter(active=True, topstory=self).order_by('ordering')
 
+    def copy_relations(self, old_instance):
+        for topstory_item in old_instance.topstory_items.all():
+            topstory_item.pk = None
+            topstory_item.topstory = self
+            topstory_item.save()
+
     def __unicode__(self):
         return self.title
 
