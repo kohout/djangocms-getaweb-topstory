@@ -1,17 +1,27 @@
-{% load staticfiles %}
+{% load staticfiles thumbnail %}
+
 {% if items %}
 <div id="swiper">
-  <a class="arrow-left" href="#"></a>
-  <a class="arrow-right" href="#"></a>
-  <div class="swiper-container">
+  <a class="arrow arrow-left" {% if items.count == 1 %}style="display:none;"{% endif %} href="#"><div></div></a>
+  <a class="arrow arrow-right" {% if items.count == 1 %}style="display:none;"{% endif %} href="#"><div></div></a>
+  <div class="swiper-container" style="width: {{ instance.width }}; height: {{ instance.height }};">
     <div class="swiper-wrapper">
       {% for item in items %}
-        <div class="swiper-slide">
-          <img src="{{ item.image.url }}" />
+        <div class="swiper-slide" style="width: {{ instance.width }}; height: {{ instance.height }};">
+          <img src="{{ item.image|thumbnail_url:item.size }}" alt="{{ item.title }}" />
+          {% if item.title or item.description %}
+              <div class="swiper-teaser
+              {% if item.teaser_position == 'left' %}swiper-teaser-left{% else %}swiper-teaser-right{% endif %}
+              swiper-teaser-layout-{{ item.teaser_layout }}">
+                {% if item.title %}<h1>{{ item.title }}</h1>{% endif %}
+                {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+              </div>
+          {% endif %}
         </div>
       {% endfor %}
     </div>
   </div>
-  <div class="swiper-pagination"></div>
+
+  <div class="swiper-pagination" {% if items.count == 1 %}style="display:none;"{% endif %}></div>
 </div>
 {% endif %}
