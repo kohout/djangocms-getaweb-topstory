@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
+from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from django.contrib import admin
 from djangocms_topstory.models import TopStory, TopStoryItem
+from djangocms_topstory.forms import TopStoryItemForm
 from adminsortable.admin import SortableInlineAdminMixin
 
 
 class TopStoryItemInline(SortableInlineAdminMixin, admin.TabularInline):
-    fields = ('active', 'title', 'description', 'teaser_position', 'teaser_layout',
-        'focal_point_x', 'focal_point_y', 'image', 'size', 'content_type',
-        'object_id', 'ordering', )
+    fields = ('active', 'title', 'image', 'ordering', )
     model = TopStoryItem
     extra = 0
     sortable_field_name = 'ordering'
@@ -14,5 +15,18 @@ class TopStoryItemInline(SortableInlineAdminMixin, admin.TabularInline):
 class TopStoryAdmin(admin.ModelAdmin):
     inlines = [TopStoryItemInline]
 
+class TopStoryItemAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
+    form = TopStoryItemForm
+    fieldsets = (
+        (None, {
+            'fields': (
+                ('active', ),
+                ('title', 'teaser_position', ),
+                ('description', 'teaser_layout', ),
+                ('content_type', 'object_id', ),
+            ),
+        }),
+    )
+
 admin.site.register(TopStory, TopStoryAdmin)
-admin.site.register(TopStoryItem)
+admin.site.register(TopStoryItem, TopStoryItemAdmin)

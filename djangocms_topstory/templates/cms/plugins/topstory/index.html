@@ -1,4 +1,4 @@
-{% load staticfiles thumbnail %}
+{% load staticfiles thumbnail cms_tags %}
 
 {% if items %}
 <div id="swiper">
@@ -8,15 +8,29 @@
     <div class="swiper-wrapper">
       {% for item in items %}
         <div class="swiper-slide" style="width: {{ instance.width }}; height: {{ instance.height }};">
+          {% comment %}
+          {% if request.toolbar.edit_mode == True %}
+          <div style="position: absolute; top: 10px; left: 50px;">
+            <a class="btn btn-primary btn-sm pull-left"
+               href="{% url 'admin:djangocms_topstory_topstoryitem_delete' item.pk %}">Löschen</a>
+            <a class="btn btn-default btn-sm pull-left"
+               href="">Bearbeiten</a>
+            <a class="btn btn-secondary btn-sm pull-left"
+               href="{% url 'admin:djangocms_topstory_topstoryitem_add' %}">Hinzufügen</a>
+          </div>
+          {% endif %}
+          {% endcomment %}
+          <a href="{% if item.content_object %}{{ item.content_object.get_absolute_url }}{% else %}#{% endif %}">
           <img src="{{ item.image|thumbnail_url:item.size }}" alt="{{ item.title }}" />
-          {% if item.title or item.description %}
+          {% if item.title or item.description or request.toolbar.edit_mode == True %}
               <div class="swiper-teaser
               {% if item.teaser_position == 'left' %}swiper-teaser-left{% else %}swiper-teaser-right{% endif %}
               swiper-teaser-layout-{{ item.teaser_layout }}">
-                {% if item.title %}<h1>{{ item.title }}</h1>{% endif %}
-                {% if item.description %}<p>{{ item.description }}</p>{% endif %}
+                {% if item.title %}<h1>{% render_model item 'title' %}</h1>{% endif %}
+                {% if item.description %}<p>{% render_model item 'description' %}</p>{% endif %}
               </div>
           {% endif %}
+          </a>
         </div>
       {% endfor %}
     </div>

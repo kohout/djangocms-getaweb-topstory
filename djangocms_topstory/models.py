@@ -6,7 +6,13 @@ from django.utils.translation import ugettext as _
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from gfklookupwidget.fields import GfkLookupField
 
+_THUMBNAIL_TOPSTORY_DEFAULT = getattr(settings,
+    'THUMBNAIL_TOPSTORY_DEFAULT', None)
+
+if _THUMBNAIL_TOPSTORY_DEFAULT is None:
+    _THUMBNAIL_TOPSTORY_DEFAULT = settings.THUMBNAIL_TOPSTORY_CHOICES[0][0]
 
 class TopStory(CMSPlugin):
     title = models.CharField(
@@ -28,7 +34,8 @@ class TopStory(CMSPlugin):
     )
 
     def get_items(self):
-        return TopStoryItem.objects.filter(active=True, topstory=self).order_by('ordering')
+        return TopStoryItem.objects.filter(active=True,
+            topstory=self).order_by('ordering')
 
     def copy_relations(self, old_instance):
         for topstory_item in old_instance.topstory_items.all():
@@ -128,13 +135,19 @@ class TopStoryItem(models.Model):
 
     size = models.CharField(
         choices=settings.THUMBNAIL_TOPSTORY_CHOICES,
-        default=settings.THUMBNAIL_TOPSTORY_CHOICES[0][0],
+        default=_THUMBNAIL_TOPSTORY_DEFAULT,
         max_length=50,
         verbose_name=_(u'Image size and scale')
     )
 
-    content_type = models.ForeignKey(ContentType, blank=True, null=True)
-    object_id = models.PositiveIntegerField(blank=True, null=True)
+    content_type = models.ForeignKey(ContentType,
+        verbose_name=u'Link-Typ',
+        blank=True, null=True)
+    #object_id = models.PositiveIntegerField(blank=True, null=True)
+    object_id = GfkLookupField(
+        'content_type',
+        verbose_name=u'Link-Ziel',
+    )
     content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
