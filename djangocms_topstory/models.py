@@ -146,9 +146,19 @@ class TopStoryItem(models.Model):
     #object_id = models.PositiveIntegerField(blank=True, null=True)
     object_id = GfkLookupField(
         'content_type',
+        null=True, blank=True,
         verbose_name=u'Link-Ziel',
     )
     content_object = generic.GenericForeignKey('content_type', 'object_id')
+
+    external_url = models.URLField(
+        blank=True, null=True,
+        verbose_name=u'Externe URL')
+
+    def save(self, *args, **kwargs):
+        if self.topstory:
+            self.topstory.save()
+        return super(TopStoryItem, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['ordering']

@@ -20,7 +20,7 @@
           </div>
           {% endif %}
           {% endcomment %}
-          <a href="{% if item.content_object %}{{ item.content_object.get_absolute_url }}{% else %}#{% endif %}">
+          <a {% if item.external_url %}target="_blank"{% endif %} href="{% if item.external_url %}{{ item.external_url }}{% elif item.content_object %}{{ item.content_object.get_absolute_url }}{% else %}#{% endif %}">
           <img src="{{ item.image|thumbnail_url:item.size }}" alt="{{ item.title }}" />
           {% if item.title or item.description or request.toolbar.edit_mode == True %}
               <div class="swiper-teaser

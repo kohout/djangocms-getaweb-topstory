@@ -24,6 +24,7 @@ class TopStoryItemAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
                 ('title', 'teaser_position', ),
                 ('description', 'teaser_layout', ),
                 ('content_type', 'object_id', ),
+                ('external_url', ),
             ),
         }),
     )
