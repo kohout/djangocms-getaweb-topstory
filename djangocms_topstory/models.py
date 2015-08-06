@@ -147,7 +147,7 @@ class TopStoryItem(models.Model):
     #object_id = models.PositiveIntegerField(blank=True, null=True)
     object_id = GfkLookupField(
         'content_type',
-        default='',
+        default=None,
         null=True, blank=True,
         verbose_name=u'Link-Ziel')
 
