@@ -3,7 +3,10 @@ from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from django.contrib import admin
 from djangocms_topstory.models import TopStory, TopStoryItem
 from djangocms_topstory.forms import TopStoryItemForm
-from adminsortable.admin import SortableInlineAdminMixin
+try:
+    from adminsortable2.admin import SortableInlineAdminMixin
+except:
+    from adminsortable.admin import SortableInlineAdminMixin
 
 
 class TopStoryItemInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -12,8 +15,10 @@ class TopStoryItemInline(SortableInlineAdminMixin, admin.TabularInline):
     extra = 0
     sortable_field_name = 'ordering'
 
+
 class TopStoryAdmin(admin.ModelAdmin):
     inlines = [TopStoryItemInline]
+
 
 class TopStoryItemAdmin(FrontendEditableAdminMixin, admin.ModelAdmin):
     form = TopStoryItemForm

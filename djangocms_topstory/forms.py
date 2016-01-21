@@ -12,6 +12,7 @@ for _ct in settings.THUMBNAIL_TOPSTORY_CONTENT_TYPES:
     else:
         f = f | (Q(app_label=_ct[0]) & Q(model=_ct[1]))
 
+
 class TopStoryItemForm(forms.ModelForm):
     content_type = forms.ModelChoiceField(
         initial=ContentType.objects.get(
@@ -21,3 +22,4 @@ class TopStoryItemForm(forms.ModelForm):
 
     class Meta:
         model = TopStoryItem
+        exclude = ()
