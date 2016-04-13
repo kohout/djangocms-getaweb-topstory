@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from easy_thumbnails.fields import ThumbnailerImageField
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.fields import GenericForeignKey
 from gfklookupwidget.fields import GfkLookupField
 
 _THUMBNAIL_TOPSTORY_DEFAULT = getattr(settings,
@@ -151,7 +151,7 @@ class TopStoryItem(models.Model):
         null=True, blank=True,
         verbose_name=u'Link-Ziel')
 
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    content_object = GenericForeignKey('content_type', 'object_id')
 
     external_url = models.URLField(
         blank=True, null=True,
